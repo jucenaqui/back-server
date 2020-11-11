@@ -1,45 +1,23 @@
 const express = require('express');
+const { check } = require('express-validator');
+
+// controllers
+const { getUsers, saveUser } = require('../controllers/user');
+const { validarCampos } = require('../midlewares/validar-campos');
 
 const router = express.Router();
 
 /// /api/user
-const User = require('../models/user');
 
-router.get('/', (req, res) => {
-
-    User.find((err, users) => {
-        if (!err) {
-            return res.status(200)
-            .json({
-                users
-            });
-        } else {
-            return res.status(400)
-            .json({
-                msg: 'error al consultar los usuarios.'
-            });
-        }
-    });
-    
-});
-router.post('/', (req, res) => {
-    const body = req.body;
-    const user = new User(body);
-    user.role =  'USER_ROLE';
-    user.image = '';
-
-    user.save((err, userSaved) => {
-        if (!err) {
-            res.json({
-                user: userSaved
-            });
-        } else {
-            res.status(400).json({
-                msg: 'error al guardar el usuario'
-            }); 
-        }
-    });
-    
-});
+router.get('/', getUsers);
+router.post('/',
+ [ 
+     check('name', 'El campo name es obligatorio').not().isEmpty(),
+     check('lastName', 'El campo lastName es obligatorio').not().isEmpty(),
+     check('password', 'El campo password es obligatorio').not().isEmpty(),
+     check('email', 'El campo email es obligatorio').isEmail(),
+     validarCampos,
+ ], 
+ saveUser );
 
 module.exports = router;
