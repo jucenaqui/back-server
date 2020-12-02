@@ -9,7 +9,7 @@ const getUsers = async (req, res) => {
 
         return res.status(200)
         .json({
-            users
+            users,
         });
     } catch (error) {
         console.log(error);

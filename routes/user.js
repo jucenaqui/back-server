@@ -1,5 +1,6 @@
 const express = require('express');
 const { check } = require('express-validator');
+const { validarJWT } = require('../midlewares/validar-jwt');
 
 // controllers
 const { getUsers, 
@@ -13,8 +14,8 @@ const router = express.Router();
 
 /// /api/user/
 
-router.get('/', getUsers);
-router.get('/:id', getUser);
+router.get('/', validarJWT , getUsers);
+router.get('/:id', validarJWT ,getUser);
 router.post('/',
  [ 
      check('name', 'El campo name es obligatorio').not().isEmpty(),
@@ -27,6 +28,7 @@ router.post('/',
  );
 router.put('/:id', 
     [
+        validarJWT,
         check('name', 'El campo name es obligatorio').not().isEmpty(),
         check('lastName', 'El campo lastName es obligatorio').not().isEmpty(),
         check('role', 'El campo role es obligatorio').not().isEmpty(),
