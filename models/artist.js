@@ -1,4 +1,4 @@
-const { Schema, Model } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const artistSchema = Schema({
     name: { type: String, required: true},
@@ -6,7 +6,8 @@ const artistSchema = Schema({
     image: String,
     user: { 
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     }
 });
 
@@ -16,4 +17,4 @@ artistSchema.method('toJSON', function(){
     return object;
 });
 
-module.exports = Model('Artist', artistSchema);
+module.exports = model('Artist', artistSchema);
